@@ -1,6 +1,6 @@
 # Reading Secrets from Azure Key Vault in AKS
 
-In this article, we will explore various mechanisms that an application hosted on Azure Kubernetes Service (AKS) can use to retrieve secrets from an [Azure Key Vault](https://learn.microsoft.com/en-us/azure/key-vault/general/basic-concepts) resource.
+In this article, we will explore various methods that an application hosted on Azure Kubernetes Service (AKS) can use to retrieve secrets from an [Azure Key Vault](https://learn.microsoft.com/en-us/azure/key-vault/general/basic-concepts) resource.
 
 ## Microsoft Entra Workload ID with Azure Kubernetes Service (AKS)
 
@@ -38,7 +38,7 @@ In the [Microsoft Entra ID](https://learn.microsoft.com/en-us/entra/fundamentals
 
 ## Azure Key Vault Provider for Secrets Store CSI Driver in AKS
 
-The [Azure Key Vault provider for Secrets Store CSI Driver](https://learn.microsoft.com/en-us/azure/aks/csi-secrets-store-driver) enables retrieving secrets, keys, and certificates stored in Azure Key Vault and accessing them as files from mounted volumes in an AKS cluster. This mechanism eliminates the need for Azure-specific libraries to access the secrets.
+The [Azure Key Vault provider for Secrets Store CSI Driver](https://learn.microsoft.com/en-us/azure/aks/csi-secrets-store-driver) enables retrieving secrets, keys, and certificates stored in Azure Key Vault and accessing them as files from mounted volumes in an AKS cluster. This method eliminates the need for Azure-specific libraries to access the secrets.
 
 This [Secret Store CSI Driver for Key Vault](https://github.com/Azure/secrets-store-csi-driver-provider-azure) offers the following features:
 
@@ -1498,7 +1498,7 @@ echo $json | jq -r 'to_entries[] | .key + ": " + (.value | @base64d)'
 
 ## Conclusions
 
-In this article, we explored different mechanisms for reading secrets from Azure Key Vault in [Azure Kubernetes Services (AKS)](https://learn.microsoft.com/en-us/azure/aks/what-is-aks). Each mechanism offers its own advantages and considerations. Here's a summary:
+In this article, we explored different methods for reading secrets from Azure Key Vault in [Azure Kubernetes Services (AKS)](https://learn.microsoft.com/en-us/azure/aks/what-is-aks). Each technology offers its own advantages and considerations. Here's a summary:
 
 - [Microsoft Entra Workload ID](https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview):
   - Transparently assigns a user-defined managed identity to a pod or deployment.
@@ -1519,4 +1519,4 @@ In this article, we explored different mechanisms for reading secrets from Azure
   - Provides synchronization of Key Vault secrets into Kubernetes secrets.
   - Simplifies secret management with Kubernetes-native integration.
 
-Depending on your requirements and preferences, you can choose the mechanism that best fits your use case. Each mechanism offers unique features and benefits to securely access and manage secrets in your AKS workloads. For more information and detailed documentation on each mechanism, refer to the provided resources in this article.
+Depending on your requirements and preferences, you can choose the method that best fits your use case. Each technology offers unique features and benefits to securely access and manage secrets in your AKS workloads. For more information and detailed documentation on each mechanism, refer to the provided resources in this article.
