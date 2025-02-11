@@ -1,4 +1,4 @@
-# Reading Secrets from Key Vault in Azure Kubernetes Service (AKS)
+# Reading Secrets from Azure Key Vault in AKS
 
 In this article, we will explore various mechanisms that an application hosted on Azure Kubernetes Service (AKS) can use to retrieve secrets from an [Azure Key Vault](https://learn.microsoft.com/en-us/azure/key-vault/general/basic-concepts) resource.
 
