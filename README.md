@@ -10,7 +10,7 @@ To enable pods to have a Kubernetes identity, [Microsoft Entra Workload ID](http
 
 As shown in the following diagram, the Kubernetes cluster becomes a security token issuer, issuing tokens to Kubernetes Service Accounts. These tokens can be configured to be trusted on Microsoft Entra applications and user-defined managed identities. They can then be exchanged for an Microsoft Entra access token using the [Azure Identity SDKs](https://docs.microsoft.com/en-us/dotnet/api/overview/azure/identity-readme) or the [Microsoft Authentication Library (MSAL)](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet).
 
-[![Microsoft Entra Workload Identity Message Flow](./images/workload-id-model.png)
+![Microsoft Entra Workload Identity Message Flow](./images/workload-id-model.png)
 
 In the [Microsoft Entra ID](https://learn.microsoft.com/en-us/entra/fundamentals/whatis) platform, there are two kinds of workload identities:
 
