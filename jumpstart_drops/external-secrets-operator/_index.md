@@ -1,10 +1,10 @@
 ## External Secrets Operator with Azure Key Vault
 
-The [External Secrets Operator](https://external-secrets.io/latest/) is a Kubernetes operator that enables managing secrets stored in external secret stores, such as Azure Key Vault, AWS Secret Manager, and Google Key Management, and Hashicorp Vault.. It leverages the Azure Key Vault provider to synchronize secrets into Kubernetes secrets for easy consumption by applications. External Secrets Operator integrates with [Azure Key vault](https://azure.microsoft.com/en-us/services/key-vault/) for secrets, certificates and Keys management.
+The [External Secrets Operator](https://external-secrets.io/latest/) is a Kubernetes operator that enables managing secrets stored in external secret stores, such as Azure Key Vault, AWS Secret Manager, and Google Key Management, and Hashicorp Vault.. It leverages the Azure Key Vault provider to synchronize secrets into Kubernetes secrets for easy consumption by applications. External Secrets Operator integrates with [Azure Key vault](https://azure.microsoft.com/services/key-vault/) for secrets, certificates and Keys management.
 
 ![External Secrets Operator and Key Vault](../../images/eso-az-kv-azure-kv.png)
 
-You can configure the [External Secrets Operator](https://external-secrets.io/latest/) to use [Microsoft Entra Workload ID](https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview) to access an [Azure Key Vault](https://learn.microsoft.com/en-us/azure/key-vault/general/basic-concepts) resource.
+You can configure the [External Secrets Operator](https://external-secrets.io/latest/) to use [Microsoft Entra Workload ID](https://learn.microsoft.com/azure/aks/workload-identity-overview) to access an [Azure Key Vault](https://learn.microsoft.com/azure/key-vault/general/basic-concepts) resource.
 
 ### Advantages
 
@@ -26,15 +26,15 @@ The `SECRETS` array variable contains a list of secrets to create in the Azure K
 
 ### Create or Update AKS Cluster
 
-You can use Bash script, [`01-create-or-update-aks.sh`](../../scripts/prerequisites/01-create-or-update-aks.sh), to create a new AKS cluster with the [az aks create](https://learn.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az-aks-create) command. This script includes the `--enable-oidc-issuer` parameter to enable the [OpenID Connect (OIDC) issuer](https://learn.microsoft.com/en-us/azure/aks/use-oidc-issuer) and the `--enable-workload-identity` parameter to enable [Microsoft Entra Workload ID](https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview). If the AKS cluster already exists, the script updates it to use the OIDC issuer and enable workload identity by calling the [az aks update](https://learn.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az-aks-update) command with the same parameters.
+You can use Bash script, [`01-create-or-update-aks.sh`](../../scripts/prerequisites/01-create-or-update-aks.sh), to create a new AKS cluster with the [az aks create](https://learn.microsoft.com/cli/azure/aks?view=azure-cli-latest#az-aks-create) command. This script includes the `--enable-oidc-issuer` parameter to enable the [OpenID Connect (OIDC) issuer](https://learn.microsoft.com/azure/aks/use-oidc-issuer) and the `--enable-workload-identity` parameter to enable [Microsoft Entra Workload ID](https://learn.microsoft.com/azure/aks/workload-identity-overview). If the AKS cluster already exists, the script updates it to use the OIDC issuer and enable workload identity by calling the [az aks update](https://learn.microsoft.com/cli/azure/aks?view=azure-cli-latest#az-aks-update) command with the same parameters.
 
 ### Create or Update Key Vault
 
-You can use Bash script, [`02-create-key-vault-and-secrets.sh`](../../scripts/prerequisites/02-create-key-vault-and-secrets.sh), to create a new [Azure Key Vault](https://learn.microsoft.com/en-us/azure/key-vault/general/basic-concepts) if it doesn't already exist, and create a couple of secrets for demonstration purposes.
+You can use Bash script, [`02-create-key-vault-and-secrets.sh`](../../scripts/prerequisites/02-create-key-vault-and-secrets.sh), to create a new [Azure Key Vault](https://learn.microsoft.com/azure/key-vault/general/basic-concepts) if it doesn't already exist, and create a couple of secrets for demonstration purposes.
 
 ### Create Managed Identity and Federated Identity Credential
 
-All the techniques use [Microsoft Entra Workload ID](https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview). The repository contains a folder for each technique. Each folder includes Bash script, [`create-managed-identity.sh`](../../scripts/external-secrets-operator/02-create-managed-identity.sh).
+All the techniques use [Microsoft Entra Workload ID](https://learn.microsoft.com/azure/aks/workload-identity-overview). The repository contains a folder for each technique. Each folder includes Bash script, [`create-managed-identity.sh`](../../scripts/external-secrets-operator/02-create-managed-identity.sh).
 
 The Bash script performs the following steps:
 
@@ -45,12 +45,12 @@ The Bash script performs the following steps:
 - It retrieves the `id` of the Azure Key Vault resource.
 - It assigns the `Key Vault Secrets User` role to the managed identity with the Azure Key Vault as the scope.
 - It checks if the specified Kubernetes namespace exists. If not, it creates the namespace.
-- It checks if a specified Kubernetes service account exists within the namespace. If not, it creates the service account with the annotations and labels required by [Microsoft Entra Workload ID](https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview).
+- It checks if a specified Kubernetes service account exists within the namespace. If not, it creates the service account with the annotations and labels required by [Microsoft Entra Workload ID](https://learn.microsoft.com/azure/aks/workload-identity-overview).
 - It checks if a specified federated identity credential exists within the resource group. If not, it retrieves the OIDC Issuer URL of the specified AKS cluster and creates the federated identity credential.
 
 ## Hands-On Lab: External Secrets Operator with Azure Key Vault
 
-In this sectioon you will see the steps to configure the [External Secrets Operator](https://external-secrets.io/latest/) to use [Microsoft Entra Workload ID](https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview) to access an [Azure Key Vault](https://learn.microsoft.com/en-us/azure/key-vault/general/basic-concepts) resource. You can install the operator to your AKS cluster using Helm, as shown in Bash script, [`01-install-external-secrets.sh`](../../scripts/external-secrets-operator/01-install-external-secrets.sh).
+In this sectioon you will see the steps to configure the [External Secrets Operator](https://external-secrets.io/latest/) to use [Microsoft Entra Workload ID](https://learn.microsoft.com/azure/aks/workload-identity-overview) to access an [Azure Key Vault](https://learn.microsoft.com/azure/key-vault/general/basic-concepts) resource. You can install the operator to your AKS cluster using Helm, as shown in Bash script, [`01-install-external-secrets.sh`](../../scripts/external-secrets-operator/01-install-external-secrets.sh).
 
 Then, you can create a user-assigned managed identity for the workload, create federated credentials, and assign the proper permissions to it to read secrets from the source Key Vault using the [`02-create-managed-identity.sh`](../../scripts/external-secrets-operator/02-create-managed-identity.sh) Bash script.
 

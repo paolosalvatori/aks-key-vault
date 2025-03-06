@@ -2,7 +2,7 @@
 
 ## Overview
 
-The [Azure Key Vault provider for Secrets Store CSI Driver](https://learn.microsoft.com/en-us/azure/aks/csi-secrets-store-driver) enables retrieving secrets, keys, and certificates stored in Azure Key Vault and accessing them as files from mounted volumes in an AKS cluster. This method eliminates the need for Azure-specific libraries to access the secrets.
+The [Azure Key Vault provider for Secrets Store CSI Driver](https://learn.microsoft.com/azure/aks/csi-secrets-store-driver) enables retrieving secrets, keys, and certificates stored in Azure Key Vault and accessing them as files from mounted volumes in an AKS cluster. This method eliminates the need for Azure-specific libraries to access the secrets.
 
 This [Secret Store CSI Driver for Key Vault](https://github.com/Azure/secrets-store-csi-driver-provider-azure) offers the following features:
 
@@ -44,15 +44,15 @@ The `SECRETS` array variable contains a list of secrets to create in the Azure K
 
 ### Create or Update AKS Cluster
 
-You can use Bash script, [`01-create-or-update-aks.sh`](../../scripts/prerequisites/01-create-or-update-aks.sh), to create a new AKS cluster with the [az aks create](https://learn.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az-aks-create) command. This script includes the `--enable-oidc-issuer` parameter to enable the [OpenID Connect (OIDC) issuer](https://learn.microsoft.com/en-us/azure/aks/use-oidc-issuer) and the `--enable-workload-identity` parameter to enable [Microsoft Entra Workload ID](https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview). If the AKS cluster already exists, the script updates it to use the OIDC issuer and enable workload identity by calling the [az aks update](https://learn.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az-aks-update) command with the same parameters.
+You can use Bash script, [`01-create-or-update-aks.sh`](../../scripts/prerequisites/01-create-or-update-aks.sh), to create a new AKS cluster with the [az aks create](https://learn.microsoft.com/cli/azure/aks?view=azure-cli-latest#az-aks-create) command. This script includes the `--enable-oidc-issuer` parameter to enable the [OpenID Connect (OIDC) issuer](https://learn.microsoft.com/azure/aks/use-oidc-issuer) and the `--enable-workload-identity` parameter to enable [Microsoft Entra Workload ID](https://learn.microsoft.com/azure/aks/workload-identity-overview). If the AKS cluster already exists, the script updates it to use the OIDC issuer and enable workload identity by calling the [az aks update](https://learn.microsoft.com/cli/azure/aks?view=azure-cli-latest#az-aks-update) command with the same parameters.
 
 ### Create or Update Key Vault
 
-You can use Bash script, [`02-create-key-vault-and-secrets.sh`](../../scripts/prerequisites/02-create-key-vault-and-secrets.sh), to create a new [Azure Key Vault](https://learn.microsoft.com/en-us/azure/key-vault/general/basic-concepts) if it doesn't already exist, and create a couple of secrets for demonstration purposes.
+You can use Bash script, [`02-create-key-vault-and-secrets.sh`](../../scripts/prerequisites/02-create-key-vault-and-secrets.sh), to create a new [Azure Key Vault](https://learn.microsoft.com/azure/key-vault/general/basic-concepts) if it doesn't already exist, and create a couple of secrets for demonstration purposes.
 
 ### Create Managed Identity and Federated Identity Credential
 
-All the techniques use [Microsoft Entra Workload ID](https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview). The repository contains a folder for each technique. Each folder includes Bash script, [`create-managed-identity.sh`](../../scripts/key-vault-csi-driver/02-create-managed-identity.sh).
+All the techniques use [Microsoft Entra Workload ID](https://learn.microsoft.com/azure/aks/workload-identity-overview). The repository contains a folder for each technique. Each folder includes Bash script, [`create-managed-identity.sh`](../../scripts/key-vault-csi-driver/02-create-managed-identity.sh).
 
 The Bash script performs the following steps:
 
@@ -63,22 +63,22 @@ The Bash script performs the following steps:
 - It retrieves the `id` of the Azure Key Vault resource.
 - It assigns the `Key Vault Secrets User` role to the managed identity with the Azure Key Vault as the scope.
 - It checks if the specified Kubernetes namespace exists. If not, it creates the namespace.
-- It checks if a specified Kubernetes service account exists within the namespace. If not, it creates the service account with the annotations and labels required by [Microsoft Entra Workload ID](https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview).
+- It checks if a specified Kubernetes service account exists within the namespace. If not, it creates the service account with the annotations and labels required by [Microsoft Entra Workload ID](https://learn.microsoft.com/azure/aks/workload-identity-overview).
 - It checks if a specified federated identity credential exists within the resource group. If not, it retrieves the OIDC Issuer URL of the specified AKS cluster and creates the federated identity credential.
 
 ## Hands-On Lab: Azure Key Vault Provider for Secrets Store CSI Driver in AKS
 
 The Secrets Store Container Storage Interface (CSI) Driver on Azure Kubernetes Service (AKS) provides various methods of identity-based access to your Azure Key Vault. You can use one of the following access methods:
 
-- [Service Connector with managed identity](https://learn.microsoft.com/en-us/azure/aks/csi-secrets-store-identity-access?tabs=azure-portal&pivots=access-with-service-connector#create-a-service-connection-in-aks-with-service-connector)
-- [Workload ID](https://learn.microsoft.com/en-us/azure/aks/csi-secrets-store-identity-access?tabs=azure-portal&pivots=access-with-a-microsoft-entra-workload-identity#create-a-service-connection-in-aks-with-service-connector)
-- [User-assigned managed identity](https://learn.microsoft.com/en-us/azure/aks/csi-secrets-store-identity-access?tabs=azure-portal&pivots=access-with-a-user-assigned-managed-identity#create-a-service-connection-in-aks-with-service-connector)
+- [Service Connector with managed identity](https://learn.microsoft.com/azure/aks/csi-secrets-store-identity-access?tabs=azure-portal&pivots=access-with-service-connector#create-a-service-connection-in-aks-with-service-connector)
+- [Workload ID](https://learn.microsoft.com/azure/aks/csi-secrets-store-identity-access?tabs=azure-portal&pivots=access-with-a-microsoft-entra-workload-identity#create-a-service-connection-in-aks-with-service-connector)
+- [User-assigned managed identity](https://learn.microsoft.com/azure/aks/csi-secrets-store-identity-access?tabs=azure-portal&pivots=access-with-a-user-assigned-managed-identity#create-a-service-connection-in-aks-with-service-connector)
 
-This article outlines focus on the [Workload ID](https://learn.microsoft.com/en-us/azure/aks/csi-secrets-store-identity-access?tabs=azure-portal&pivots=access-with-a-microsoft-entra-workload-identity#create-a-service-connection-in-aks-with-service-connector) option. Please see the documentantion for the other methods.
+This article outlines focus on the [Workload ID](https://learn.microsoft.com/azure/aks/csi-secrets-store-identity-access?tabs=azure-portal&pivots=access-with-a-microsoft-entra-workload-identity#create-a-service-connection-in-aks-with-service-connector) option. Please see the documentantion for the other methods.
 
-Run Bash script, [`01-enable-addon.sh`](../../scripts/key-vault-csi-driver/01-enable-addon.sh), to upgrade your AKS cluster with the [Azure Key Vault provider for Secrets Store CSI Driver](https://learn.microsoft.com/en-us/azure/aks/csi-secrets-store-driver) capability using the [az aks enable-addons](https://learn.microsoft.com/en-us/cli/azure/aks#az-aks-enable-addons) command to enable the `azure-keyvault-secrets-provider` add-on. The add-on creates a user-assigned managed identity you can use to authenticate to your key vault. Alternatively, you can use a bring-your-own user-assigned managed identity.
+Run Bash script, [`01-enable-addon.sh`](../../scripts/key-vault-csi-driver/01-enable-addon.sh), to upgrade your AKS cluster with the [Azure Key Vault provider for Secrets Store CSI Driver](https://learn.microsoft.com/azure/aks/csi-secrets-store-driver) capability using the [az aks enable-addons](https://learn.microsoft.com/cli/azure/aks#az-aks-enable-addons) command to enable the `azure-keyvault-secrets-provider` add-on. The add-on creates a user-assigned managed identity you can use to authenticate to your key vault. Alternatively, you can use a bring-your-own user-assigned managed identity.
 
-You can create a user-assigned managed identity for the workload, create federated credentials, and assign the proper permissions to it to read secrets from the source Key Vault using the [`02-create-managed-identity.sh`](../../scripts/key-vault-csi-driver/02-create-managed-identity.sh) Bash script. The next step is creating an instance of the [SecretProviderClass](https://learn.microsoft.com/en-us/azure/aks/aksarc/secrets-store-csi-driver#create-and-apply-your-own-secretproviderclass-object) custom resource in your workload namespace using Bash script, [`03-create-secret-provider-class.sh`](../../scripts/key-vault-csi-driver/03-create-secret-provider-class.sh). The `SecretProviderClass` is a namespaced resource in Secrets Store CSI Driver that is used to provide driver configurations and provider-specific parameters to the CSI driver. The `SecretProviderClass` allows you to indicate the client ID of a user-assigned managed identity used to read secret material from Key Vault, and the list of secrets, keys, and certificates to read from Key Vault. For each object, you can optionally indicate an alternative name or alias using the `objectAlias` property. In this case, the driver will create a file with the alias as the name. You can even indicate a specific version of a secret, key, or certificate. You can retrieve the latest version just by assigning the `objectVersion` the null value or empty string.
+You can create a user-assigned managed identity for the workload, create federated credentials, and assign the proper permissions to it to read secrets from the source Key Vault using the [`02-create-managed-identity.sh`](../../scripts/key-vault-csi-driver/02-create-managed-identity.sh) Bash script. The next step is creating an instance of the [SecretProviderClass](https://learn.microsoft.com/azure/aks/aksarc/secrets-store-csi-driver#create-and-apply-your-own-secretproviderclass-object) custom resource in your workload namespace using Bash script, [`03-create-secret-provider-class.sh`](../../scripts/key-vault-csi-driver/03-create-secret-provider-class.sh). The `SecretProviderClass` is a namespaced resource in Secrets Store CSI Driver that is used to provide driver configurations and provider-specific parameters to the CSI driver. The `SecretProviderClass` allows you to indicate the client ID of a user-assigned managed identity used to read secret material from Key Vault, and the list of secrets, keys, and certificates to read from Key Vault. For each object, you can optionally indicate an alternative name or alias using the `objectAlias` property. In this case, the driver will create a file with the alias as the name. You can even indicate a specific version of a secret, key, or certificate. You can retrieve the latest version just by assigning the `objectVersion` the null value or empty string.
 
 The Bash script creates a `SecretProviderClass` custom resource configured to read the latest value of the `username` and `password` secrets from the source Key Vault. You can now use Bash script, [`04-create-demo-pod.sh`](../../scripts/key-vault-csi-driver/04-create-demo-pod.sh), to deploy the sample application.
 
@@ -88,7 +88,7 @@ You can run Bash Script, [`05-list-secrets.sh`](../../scripts/key-vault-csi-driv
 
 ## Conclusion
 
-[Azure Key Vault provider for Secrets Store CSI Driver](https://learn.microsoft.com/en-us/azure/aks/csi-secrets-store-driver) can be summarized as follows:
+[Azure Key Vault provider for Secrets Store CSI Driver](https://learn.microsoft.com/azure/aks/csi-secrets-store-driver) can be summarized as follows:
   - Secrets, keys, and certificates can be accessed as files from mounted volumes.
   - Optionally, Kubernetes secrets can be created to store keys, secrets, and certificates from Key Vault.
   - No need for Azure-specific libraries to access secrets.
@@ -96,7 +96,7 @@ You can run Bash Script, [`05-list-secrets.sh`](../../scripts/key-vault-csi-driv
 
 ## Resources
 
-- [Using the Azure Key Vault Provider for Secrets Store CSI Driver in AKS](https://learn.microsoft.com/en-us/azure/aks/csi-secrets-store-driver)
-- [Access Azure Key Vault with the CSI Driver Identity Provider](https://learn.microsoft.com/en-us/azure/aks/csi-secrets-store-identity-access?tabs=azure-portal&pivots=access-with-service-connector)
-- [Configuration and Troubleshooting Options for Azure Key Vault Provider in AKS](https://learn.microsoft.com/en-us/azure/aks/csi-secrets-store-configuration-options)
+- [Using the Azure Key Vault Provider for Secrets Store CSI Driver in AKS](https://learn.microsoft.com/azure/aks/csi-secrets-store-driver)
+- [Access Azure Key Vault with the CSI Driver Identity Provider](https://learn.microsoft.com/azure/aks/csi-secrets-store-identity-access?tabs=azure-portal&pivots=access-with-service-connector)
+- [Configuration and Troubleshooting Options for Azure Key Vault Provider in AKS](https://learn.microsoft.com/azure/aks/csi-secrets-store-configuration-options)
 - [Azure Key Vault Provider for Secrets Store CSI Driver](https://github.com/Azure/secrets-store-csi-driver-provider-azure)
