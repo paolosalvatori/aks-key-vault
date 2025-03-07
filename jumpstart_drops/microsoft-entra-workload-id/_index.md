@@ -8,7 +8,7 @@ To enable pods to have a Kubernetes identity, [Microsoft Entra Workload ID](http
 
 As shown in the following diagram, the Kubernetes cluster becomes a security token issuer, issuing tokens to Kubernetes Service Accounts. These tokens can be configured to be trusted on Microsoft Entra applications and user-defined managed identities. They can then be exchanged for an Microsoft Entra access token using the [Azure Identity SDKs](https://docs.microsoft.com/dotnet/api/overview/azure/identity-readme) or the [Microsoft Authentication Library (MSAL)](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet).
 
-![Microsoft Entra Workload Identity Message Flow](../../images/workload-id-model.png)
+![Microsoft Entra Workload Identity Message Flow](./artifacts/media/workload-id-model.png)
 
 In the [Microsoft Entra ID](https://learn.microsoft.com/entra/fundamentals/whatis) platform, there are two kinds of workload identities:
 
@@ -31,25 +31,25 @@ In the [Microsoft Entra ID](https://learn.microsoft.com/entra/fundamentals/whati
 
 ### Configure Variables
 
-The first step is setting up the name for a new or existing AKS cluster and Azure Key Vault resource in the [`scripts/00-variables.sh`](../../scripts/00-variables.sh) file, which is included and used by all the scripts in this sample.
+The first step is setting up the name for a new or existing AKS cluster and Azure Key Vault resource in the [`prerequisites/00-variables.sh`](./artifacts/scripts/prerequisites/00-variables.sh) file.
 
 The `SECRETS` array variable contains a list of secrets to create in the Azure Key Vault resource, while the `VALUES` array contains their values. 
 
 ### Create or Update AKS Cluster
 
-You can use Bash script, [`01-create-or-update-aks.sh`](../../scripts/prerequisites/01-create-or-update-aks.sh), to create a new AKS cluster with the [az aks create](https://learn.microsoft.com/cli/azure/aks?view=azure-cli-latest#az-aks-create) command. This script includes the `--enable-oidc-issuer` parameter to enable the [OpenID Connect (OIDC) issuer](https://learn.microsoft.com/azure/aks/use-oidc-issuer) and the `--enable-workload-identity` parameter to enable [Microsoft Entra Workload ID](https://learn.microsoft.com/azure/aks/workload-identity-overview). If the AKS cluster already exists, the script updates it to use the OIDC issuer and enable workload identity by calling the [az aks update](https://learn.microsoft.com/cli/azure/aks?view=azure-cli-latest#az-aks-update) command with the same parameters.
+You can use Bash script, [`01-create-or-update-aks.sh`](./artifacts/scripts/prerequisites/01-create-or-update-aks.sh), to create a new AKS cluster with the [az aks create](https://learn.microsoft.com/cli/azure/aks?view=azure-cli-latest#az-aks-create) command. This script includes the `--enable-oidc-issuer` parameter to enable the [OpenID Connect (OIDC) issuer](https://learn.microsoft.com/azure/aks/use-oidc-issuer) and the `--enable-workload-identity` parameter to enable [Microsoft Entra Workload ID](https://learn.microsoft.com/azure/aks/workload-identity-overview). If the AKS cluster already exists, the script updates it to use the OIDC issuer and enable workload identity by calling the [az aks update](https://learn.microsoft.com/cli/azure/aks?view=azure-cli-latest#az-aks-update) command with the same parameters.
 
 ### Create or Update Key Vault
 
-You can use Bash script, [`02-create-key-vault-and-secrets.sh`](../../scripts/prerequisites/02-create-key-vault-and-secrets.sh), to create a new [Azure Key Vault](https://learn.microsoft.com/azure/key-vault/general/basic-concepts) if it doesn't already exist, and create a couple of secrets for demonstration purposes.
+You can use Bash script, [`02-create-key-vault-and-secrets.sh`](./artifacts/scripts/prerequisites/02-create-key-vault-and-secrets.sh), to create a new [Azure Key Vault](https://learn.microsoft.com/azure/key-vault/general/basic-concepts) if it doesn't already exist, and create a couple of secrets for demonstration purposes.
 
 ### Create Managed Identity and Federated Identity Credential
 
-All the techniques use [Microsoft Entra Workload ID](https://learn.microsoft.com/azure/aks/workload-identity-overview). The repository contains a folder for each technique. Each folder includes Bash script, [`create-managed-identity.sh`](../../scripts/microsoft-entra-workload-id/01-create-managed-identity.sh).
+All the techniques use [Microsoft Entra Workload ID](https://learn.microsoft.com/azure/aks/workload-identity-overview). The repository contains a folder for each technique. Each folder includes Bash script, [`create-managed-identity.sh`](./artifacts/scripts/01-create-managed-identity.sh).
 
 The Bash script performs the following steps:
 
-- It sources variables from two files: [`scripts/00-variables.sh`](../../scripts/00-variables.sh) and [`scripts/microsoft-entra-workload-id/00-variables.sh`](../../scripts\microsoft-entra-workload-id\00-variables.sh) .
+- It sources variables from two files: [`prerequisites/00-variables.sh`](./artifacts/scripts/prerequisites/00-variables.sh) and [`scripts/00-variables.sh`](./artifacts/scripts/00-variables.sh) .
 - It checks if the specified resource group exists. If not, it creates the resource group.
 - It checks if the specified managed identity exists within the resource group. If not, it creates a user-assigned managed identity.
 - It retrieves the `principalId` and `clientId` of the managed identity.
@@ -67,7 +67,7 @@ To enable pods to use a Kubernetes identity, Microsoft Entra Workload ID utilize
 
 Utilizing the [Azure Identity client libraries](https://learn.microsoft.com/azure/aks/workload-identity-overview?tabs=dotnet#azure-identity-client-libraries) or the [Microsoft Authentication Library](https://learn.microsoft.com/azure/active-directory/develop/msal-overview) (MSAL) collection, alongside [application registration](https://learn.microsoft.com/azure/active-directory/develop/application-model#register-an-application), Microsoft Entra Workload ID seamlessly authenticates and provides access to Azure cloud resources for your workload.
 
-You can create a user-assigned managed identity for the workload, create federated credentials, and assign the proper permissions to it to read secrets from the source Key Vault using the [`01-create-managed-identity.sh`](../../scripts/microsoft-entra-workload-id/01-create-managed-identity.sh) Bash script. Then, you can run Bash script, [`02-create-demo-pod.sh`](../../scripts/microsoft-entra-workload-id/02-create-demo-pod.sh), to retrieve the URL of the Azure Key Vault endpoint and then starts a demo pod in the `workload-id-test` namespace. The pod receives two parameters via environment variables:
+You can create a user-assigned managed identity for the workload, create federated credentials, and assign the proper permissions to it to read secrets from the source Key Vault using the [`01-create-managed-identity.sh`](./artifacts/scripts/01-create-managed-identity.sh) Bash script. Then, you can run Bash script, [`02-create-demo-pod.sh`](./artifacts/scripts/02-create-demo-pod.sh), to retrieve the URL of the Azure Key Vault endpoint and then starts a demo pod in the `workload-id-test` namespace. The pod receives two parameters via environment variables:
 
 - `KEYVAULT_URL`: The Azure Key Vault endpoint URL.
 - `SECRET_NAME`: The name of a secret stored in Azure Key Vault.
@@ -93,7 +93,7 @@ The class uses the [ConfidentialClientApplicationBuilder](https://learn.microsof
 | **Node.JS** | [microsoft-authentication-library-for-js](https://github.com/AzureAD/microsoft-authentication-library-for-js) | [Link](https://github.com/Azure/azure-workload-identity/tree/main/examples/msal-node) | `ghcr.io/azure/azure-workload-identity/msal-node` | [Link](https://github.com/Azure/azure-workload-identity/tree/main/examples/msal-node) | ❌ |
 | **Python** | [microsoft-authentication-library-for-python](https://github.com/AzureAD/microsoft-authentication-library-for-python) | [Link](https://github.com/Azure/azure-workload-identity/tree/main/examples/msal-python) | `ghcr.io/azure/azure-workload-identity/msal-python` | [Link](https://github.com/Azure/azure-workload-identity/tree/main/examples/msal-python) | ❌ |
 
-The application code retrieves the secret value specified by the `SECRET_NAME` parameter and logs it to the standard output. Therefore, you can use Bash script, [`03-list-secret.sh`](../../scripts/microsoft-entra-workload-id/03-list-secret.sh), to display the logs generated by the pod.
+The application code retrieves the secret value specified by the `SECRET_NAME` parameter and logs it to the standard output. Therefore, you can use Bash script, [`03-list-secret.sh`](./artifacts/scripts/03-list-secret.sh), to display the logs generated by the pod.
 
 The script should generate an output similar to the following:
 
