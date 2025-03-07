@@ -81,7 +81,7 @@ You can create a user-assigned managed identity for the workload, create federat
 - Key Vault name to the `vaultName` attribute.
 - Client id of the user-assigned managed identity to the `azureClientId` attribute.
 
-The next step is deploying the demo application using Bash script, [`04-create-test-app.sh`](./artifacts/scripts/04-create-test-app.sh),. The service account used by the Kubernetes deployment is federated with the user-assigned managed identity. Also note that the deployment is configured to use Dapr via the following Kubernetes annotations:
+The next step is deploying the demo application using Bash script, [`04-create-test-app.sh`](./artifacts/scripts/04-create-test-app.sh). The service account used by the Kubernetes deployment is federated with the user-assigned managed identity. Also note that the deployment is configured to use Dapr via the following Kubernetes annotations:
 
 - `dapr.io/app-id`: The unique ID of the application. Used for service discovery, state encapsulation and the pub/sub consumer ID.
 - `dapr.io/enabled`: Setting this paramater to true injects the Dapr sidecar into the pod.
